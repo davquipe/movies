@@ -8,7 +8,7 @@ const Img = ({ src, className }) => {
 			className={className || ''}
 			alt=""
 			effect="blur"
-			src={`https://image.tmdb.org/t/p/original/${src}`}
+			src={src}
 		/>
 	)
 }
