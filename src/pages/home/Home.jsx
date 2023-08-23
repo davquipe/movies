@@ -9,6 +9,7 @@ const Home = () => {
 				<title>Home | React Movie App</title>
 			</Helmet>
 			<HeroBanner />
+			<div></div>
 		</div>
 	)
 }
