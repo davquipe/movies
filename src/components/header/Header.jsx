@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { SlMenu } from 'react-icons/sl'
 import { VscChromeClose } from 'react-icons/vsc'
 import { useNavigate, useLocation } from 'react-router-dom'
 
-import logo from '../../assets/images/movix-logo.svg'
 import './Header.scss'
+import logo from '../../assets/images/movix-logo.svg'
 import ContentWrapper from '../contentWrapper/ContentWrapper'
 
 const Header = () => {
@@ -16,6 +16,31 @@ const Header = () => {
 	const [showSearch, setShowSearch] = useState('')
 	const navigate = useNavigate()
 	const location = useLocation()
+
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	}, [location])
+
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	const controlNavbar = () => {
+		if (window.scrollY > 200) {
+			if (window.scrollY > lastScrollY && !mobileMenu) {
+				setShow('hide')
+			} else {
+				setShow('show')
+			}
+		} else {
+			setShow('top')
+		}
+		setLastScrollY(window.scrollY)
+	}
+
+	useEffect(() => {
+		window.addEventListener('scroll', controlNavbar)
+		return () => {
+			window.removeEventListener('scroll', controlNavbar)
+		}
+	}, [controlNavbar])
 
 	const searchQueryHandler = (e) => {
 		if (e.key === 'Enter' && query.length > 0) {

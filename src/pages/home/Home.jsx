@@ -9,7 +9,7 @@ const Home = () => {
 				<title>Home | React Movie App</title>
 			</Helmet>
 			<HeroBanner />
-			<div></div>
+			<div style={{ height: 1000 }}></div>
 		</div>
 	)
 }
