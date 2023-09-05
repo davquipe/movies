@@ -1,8 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import './App.css'
 import { fetchDataApi } from './utils/api'
 import { useDispatch } from 'react-redux'
-import { getApiConfiguration } from './store/slice/homeSlice'
+import { getApiConfiguration, getGenres } from './store/slice/homeSlice'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/home/Home'
 import Details from './pages/details/Details'
@@ -27,7 +28,26 @@ function App() {
 			})
 		}
 		fetchApiConfig()
+		genresCall()
 	}, [dispatch])
+
+	const genresCall = async () => {
+		let promises = []
+		let endPoints = ['tv', 'movie']
+		let allGenres = {}
+
+		endPoints.forEach((url) => {
+			promises.push(fetchDataApi(`/genre/${url}/list`))
+		})
+
+		const data = await Promise.all(promises)
+		console.log(data)
+		data.map(({ genres }) => {
+			return genres.map((item) => (allGenres[item.id] = item))
+		})
+
+		dispatch(getGenres(allGenres))
+	}
 
 	return (
 		<BrowserRouter>
