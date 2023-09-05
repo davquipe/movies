@@ -1,9 +1,15 @@
-.homePage {
-	.homePage__title {
-		font-size: 2rem;
-		font-weight: bold;
+.carouselSection {
+	position: relative;
+	margin-bottom: 70px;
+	& > .contentWrapper {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 20px;
 	}
-	.homePage__content {
-		font-size: 1.5rem;
+	.carouselTitle {
+		font-size: 24px;
+		color: white;
+		font-weight: normal;
 	}
 }

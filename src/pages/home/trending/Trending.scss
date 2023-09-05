@@ -1,0 +1,26 @@
+.carouselSection {
+	position: relative;
+	margin-bottom: 70px;
+	& > contentWrapper {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 20px;
+		& > title {
+			font-size: 20px;
+			font-weight: 500;
+			color: var(--black1);
+		}
+		& > seeAll {
+			font-size: 14px;
+			font-weight: 500;
+			color: var(--pink);
+			cursor: pointer;
+		}
+	}
+	.carouselTitle {
+		font-size: 24px;
+		color: white;
+		font-weight: normal;
+	}
+}

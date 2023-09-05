@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async'
 import HeroBanner from './HeroBanner/HeroBanner'
 import './Home.scss'
+import Trending from './trending/Trending'
 
 const Home = () => {
 	return (
@@ -9,6 +10,7 @@ const Home = () => {
 				<title>Home | React Movie App</title>
 			</Helmet>
 			<HeroBanner />
+			<Trending />
 			<div style={{ height: 1000 }}></div>
 		</div>
 	)
