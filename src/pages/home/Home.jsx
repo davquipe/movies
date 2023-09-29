@@ -9,7 +9,7 @@ const Home = () => {
 	return (
 		<div className="homePage">
 			<Helmet>
-				<title>Home | React Movie App</title>
+				<title>Home | Movies</title>
 			</Helmet>
 			<HeroBanner />
 			<Popular />
