@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
-import './App.css'
 import { fetchDataApi } from './utils/api'
 import { useDispatch } from 'react-redux'
 import { getApiConfiguration, getGenres } from './store/slice/homeSlice'
