@@ -1,31 +1,37 @@
 import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa'
-
 import ContentWrapper from '../contentWrapper/ContentWrapper'
-
 import './Footer.scss'
+
+const menuItems = ['Terms Of Use', 'Privacy Policy', 'About', 'Blog', 'FAQ']
 
 const Footer = () => {
 	return (
 		<footer className="footer">
 			<ContentWrapper>
-				<ul className="menuItems">
-					<li className="menuItem">Terms Of Use</li>
-					<li className="menuItem">Privacy-Policy</li>
-					<li className="menuItem">About</li>
-					<li className="menuItem">Blog</li>
-					<li className="menuItem">FAQ</li>
-				</ul>
+				<nav aria-label="Footer menu">
+					<ul className="menuItems">
+						{menuItems.map((label) => (
+							<li key={label} className="menuItem">
+								<span>{label}</span>
+							</li>
+						))}
+					</ul>
+				</nav>
+
 				<div className="infoText">
-					Movies App is a product of{' '}
+					Movies App is developed by{' '}
 					<a
 						href="https://github.com/davquipe"
 						target="_blank"
 						rel="noreferrer">
 						David Condori
 					</a>
-					<br />
-					All rights reserved &copy; {new Date().getFullYear()}
 				</div>
+
+				<small className="infoText">
+					All rights reserved &copy; {new Date().getFullYear()}
+				</small>
+
 				<div className="socialIcons">
 					<span className="icon">
 						<FaFacebookF />
