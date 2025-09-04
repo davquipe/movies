@@ -1,10 +1,7 @@
-/* eslint-disable no-unsafe-optional-chaining */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Helmet } from 'react-helmet-async'
 import './SearchResult.scss'
 
-// import noResults from '../../assets/images/no-results.png'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchDataApi } from '../../utils/api'
 import Spinner from '../../components/spinner/Spinner'
@@ -13,48 +10,45 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import MovieCard from '../../components/movieCard/MovieCard'
 
 const SearchResult = () => {
-	const [data, setData] = useState(null)
+	const [data, setData] = useState({ results: [] })
 	const [pageNum, setPageNum] = useState(1)
 	const [loading, setLoading] = useState(false)
 
 	const { query } = useParams()
 
-	console.log(query)
-
-	const fetchInitialData = async () => {
+	const fetchInitialData = useCallback(async () => {
 		setLoading(true)
-		fetchDataApi(`/search/multi?query=${query}&page=${pageNum}`).then(
-			(res) => {
-				setData(res)
-				setPageNum((prev) => prev + 1)
-				setLoading(false)
-			},
+		const res = await fetchDataApi(
+			`/search/multi?query=${query}&page=${pageNum}`,
 		)
-	}
+		setData(res)
+		setPageNum((page) => page + 1)
+		setLoading(false)
+	}, [query])
 
-	const fetchMoreData = async () => {
-		setLoading(true)
-		fetchDataApi(`/search/multi?query=${query}&page=${pageNum}`).then(
-			(res) => {
-				if (data?.results) {
-					setData({
-						...data,
-						results: [...data?.results, ...res.results],
-					})
-				} else {
-					setData(res)
-				}
-				setPageNum((prev) => prev + 1)
-			},
+	const fetchNextPageData = async () => {
+		const res = await fetchDataApi(
+			`/search/multi?query=${query}&page=${pageNum}`,
 		)
+		if (data?.results) {
+			setData({
+				...data,
+				results: [...data.results, ...res.results],
+			})
+		} else {
+			setData(res)
+		}
+		setPageNum((page) => page + 1)
 	}
 
 	useEffect(() => {
 		setPageNum(1)
 		fetchInitialData()
-	}, [query])
+	}, [query, fetchInitialData])
 
-	const title = `🔍 Search Result for ${query}`
+	const title = `Search result${
+		data?.total_results !== 1 ? 's' : ''
+	} for "${query}"`
 	return (
 		<>
 			<Helmet>
@@ -69,18 +63,19 @@ const SearchResult = () => {
 							<>
 								<div className="pageTitle">
 									{`Search ${
-										data?.total_results > 1
+										data.total_results > 1
 											? 'results'
 											: 'result'
 									} of '${query}'`}
 								</div>
+
 								<InfiniteScroll
 									className="content"
 									dataLength={data?.results?.length || []}
-									next={fetchMoreData}
+									next={fetchNextPageData}
 									hasMore={pageNum <= data?.total_pages}
 									loader={<Spinner />}>
-									{data?.results.map((item, index) => {
+									{data?.results?.map((item, index) => {
 										if (item.media_type === 'person') return
 										return (
 											<MovieCard
@@ -94,7 +89,7 @@ const SearchResult = () => {
 							</>
 						) : (
 							<span className="resultNotFound">
-								Sorry, Results not found!
+								Sorry, Result not found!
 							</span>
 						)}
 					</ContentWrapper>
