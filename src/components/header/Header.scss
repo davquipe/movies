@@ -82,6 +82,15 @@
 			cursor: pointer;
 			@include md { display: none; }
 		}
+		.mobileCalendar {
+			color: white;
+			background: transparent;
+			border: 0;
+			font: inherit;
+			font-size: 13px;
+			cursor: pointer;
+			@include md { display: none; }
+		}
 	}
 
 	&.mobileView {

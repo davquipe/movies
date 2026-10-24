@@ -90,6 +90,9 @@ const Header = () => {
 					<li className="menuItem" onClick={() => navigate('/watchlist')}>
 						Watchlist
 					</li>
+					<li className="menuItem" onClick={() => navigate('/calendar')}>
+						Coming soon
+					</li>
 					<li className="menuItem">
 						<HiOutlineSearch onClick={openSearch} />
 					</li>
@@ -103,6 +106,7 @@ const Header = () => {
 						<SlMenu onClick={openMobileMenu} />
 					)}
 					<button className="mobileWatchlist" onClick={() => { navigate('/watchlist'); setMobileMenu(false) }}>My List</button>
+					<button className="mobileCalendar" onClick={() => { navigate('/calendar'); setMobileMenu(false) }}>Calendar</button>
 				</div>
 			</ContentWrapper>
 			{showSearch && (
