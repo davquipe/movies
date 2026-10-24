@@ -8,6 +8,7 @@ import './Cast.scss'
 import ContentWrapper from '../../../components/contentWrapper/ContentWrapper'
 import Img from '../../../components/lazyLoadImage/Img'
 import avatar from '../../../assets/images/avatar.png'
+import { Link } from 'react-router-dom'
 
 const Cast = ({ data, loading }) => {
 	const { url } = useSelector((state) => state.home)
@@ -32,7 +33,7 @@ const Cast = ({ data, loading }) => {
 								? url.profile + item.profile_path
 								: avatar
 							return (
-								<div key={item.id} className="listItem">
+								<Link key={item.id} to={`/person/${item.id}`} className="listItem" aria-label={`View ${item.name}'s profile`}>
 									<div className="profileImg">
 										<Img src={imgUrl} />
 									</div>
@@ -40,7 +41,7 @@ const Cast = ({ data, loading }) => {
 									<div className="character">
 										{item.character}
 									</div>
-								</div>
+								</Link>
 							)
 						})}
 					</div>
