@@ -9,6 +9,7 @@ import Details from './pages/details/Details'
 import SearchResult from './pages/searchResult/SearchResult'
 import Explore from './pages/explore/Explore'
 import PageNotFound from './pages/404/PageNotFound'
+import Watchlist from './pages/watchlist/Watchlist'
 import Header from './components/header/Header'
 import Footer from './components/footer/Footer'
 
@@ -54,6 +55,7 @@ function App() {
 				<Route path="/" element={<Home />} />
 				<Route path="/:mediaType/:id" element={<Details />} />
 				<Route path="/search/:query" element={<SearchResult />} />
+				<Route path="/watchlist" element={<Watchlist />} />
 				<Route path="explore/:mediaType" element={<Explore />} />
 				<Route path="*" element={<PageNotFound />} />
 			</Routes>

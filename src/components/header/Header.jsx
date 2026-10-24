@@ -87,6 +87,9 @@ const Header = () => {
 						onClick={() => navigationHandler('tv')}>
 						TV Shows
 					</li>
+					<li className="menuItem" onClick={() => navigate('/watchlist')}>
+						Watchlist
+					</li>
 					<li className="menuItem">
 						<HiOutlineSearch onClick={openSearch} />
 					</li>
@@ -99,6 +102,7 @@ const Header = () => {
 					) : (
 						<SlMenu onClick={openMobileMenu} />
 					)}
+					<button className="mobileWatchlist" onClick={() => { navigate('/watchlist'); setMobileMenu(false) }}>My List</button>
 				</div>
 			</ContentWrapper>
 			{showSearch && (

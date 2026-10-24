@@ -1,0 +1,12 @@
+.watchlistPage {
+	min-height: 75vh;
+	padding: 110px 0 60px;
+	color: #fff;
+	 h1 { font-size: 28px; margin: 0 0 28px; }
+}
+.watchlistGrid {
+	display: flex;
+	flex-flow: row wrap;
+	gap: 10px;
+}
+.watchlistEmpty { color: rgba(255, 255, 255, 0.65); }
