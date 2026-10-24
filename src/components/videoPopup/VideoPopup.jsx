@@ -10,13 +10,14 @@ const VideoPopup = ({ show, setShow, videoId, setVideoId }) => {
 		setShow(false)
 		setVideoId(null)
 	}
+	if (!show || !videoId) return null
 	return (
-		<div className={`videoPopup ${show ? 'visible' : ''}`}>
-			<div className="opacityLayer" onClick={hidePopup}></div>
+		<div className="videoPopup visible" role="dialog" aria-modal="true" aria-label="Video player">
+			<button className="opacityLayer" type="button" onClick={hidePopup} aria-label="Close video player"></button>
 			<div className="videoPlayer">
-				<span className="closeBtn" onClick={hidePopup}>
+				<button className="closeBtn" type="button" onClick={hidePopup}>
 					Close
-				</span>
+				</button>
 				<ReactPlayer
 					url={`https://www.youtube.com/watch?v=${videoId}`}
 					controls

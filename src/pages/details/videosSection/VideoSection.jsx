@@ -11,6 +11,7 @@ import { PlayIcon } from '../Playbtn'
 const VideosSection = ({ data, loading }) => {
 	const [show, setShow] = useState(false)
 	const [videoId, setVideoId] = useState(null)
+	const videos = data?.results?.filter((video) => video.site === 'YouTube' && video.key) || []
 
 	const loadingSkeleton = () => {
 		return (
@@ -26,9 +27,9 @@ const VideosSection = ({ data, loading }) => {
 		<div className="videosSection">
 			<ContentWrapper>
 				<div className="sectionHeading">Official Videos</div>
-				{!loading ? (
-					<div className="videos">
-						{data?.results?.map((video) => (
+					{!loading ? (
+						videos.length > 0 ? <div className="videos">
+						{videos.map((video) => (
 							<div
 								key={video.id}
 								className="videoItem"
@@ -45,7 +46,7 @@ const VideosSection = ({ data, loading }) => {
 								<div className="videoTitle">{video.name}</div>
 							</div>
 						))}
-					</div>
+						</div> : <p className="videosEmpty">No official videos are available for this title yet.</p>
 				) : (
 					<div className="videoSkeleton">
 						{loadingSkeleton()}

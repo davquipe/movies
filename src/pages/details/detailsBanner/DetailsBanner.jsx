@@ -91,17 +91,20 @@ const DetailsBanner = ({ video, crew, details: data, loading }) => {
 													1,
 												)}
 											/>
-											<div
-												className="playbtn"
+											<button
+												className={`playbtn ${video?.key ? '' : 'playbtn--unavailable'}`}
+												type="button"
+												disabled={!video?.key}
 												onClick={() => {
-													setShow(true)
+													if (!video?.key) return
 													setVideoId(video.key)
+													setShow(true)
 												}}>
 												<PlayIcon />
 												<span className="text">
-													Watch Trailer
+													{video?.key ? 'Watch Trailer' : 'Trailer unavailable'}
 												</span>
-											</div>
+											</button>
 										</div>
 
 										<div className="overview">

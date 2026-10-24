@@ -118,6 +118,11 @@
 				display: flex;
 				align-items: center;
 				gap: 20px;
+				padding: 0;
+				border: 0;
+				background: transparent;
+				color: inherit;
+				font: inherit;
 				cursor: pointer;
 				svg {
 					width: 60px;
@@ -157,6 +162,7 @@
 						stroke: var(--pink);
 					}
 				}
+				&--unavailable { opacity: 0.55; cursor: not-allowed; }
 			}
 			.row {
 				display: flex;

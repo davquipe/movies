@@ -21,10 +21,13 @@ const Details = () => {
 	const { data: details, loading: detailsLoading } = useFetch(
 		`/${mediaType}/${id}?append_to_response=images,keywords`,
 	)
+	const trailer = data?.results?.find((video) => video.site === 'YouTube' && video.key && video.type === 'Trailer')
+		|| data?.results?.find((video) => video.site === 'YouTube' && video.key && video.type === 'Teaser')
+		|| data?.results?.find((video) => video.site === 'YouTube' && video.key)
 
 	return (
 		<>
-			<DetailsBanner video={data?.results?.[0]} crew={credits?.crew} details={details} loading={detailsLoading} />
+			<DetailsBanner video={trailer} crew={credits?.crew} details={details} loading={detailsLoading} />
 			<div className="detailsExtra"><WatchProviders mediaType={mediaType} id={id} /></div>
 			<DetailsExtras data={details} mediaType={mediaType} />
 			{mediaType === 'tv' && <TvSeasons showId={id} seasons={details?.seasons} />}
