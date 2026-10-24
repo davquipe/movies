@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
 	BsFillArrowLeftCircleFill,
 	BsFillArrowRightCircleFill,
@@ -21,6 +21,10 @@ const Carousel = ({ data, loading, endpoint, title, imageMode = false, onImageCl
 	const carouselContainer = useRef()
 	const { url } = useSelector((state) => state.home)
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		carouselContainer.current?.scrollTo({ left: 0 })
+	}, [data])
 
 	const navigation = (dir) => {
 		const container = carouselContainer.current
@@ -98,12 +102,12 @@ const Carousel = ({ data, loading, endpoint, title, imageMode = false, onImageCl
 									<div className="posterBlock">
 										<Img src={posterUrl} />
 										<CircleRating
-											rating={item.vote_average.toFixed(
-												1,
-											)}
+											rating={Number.isFinite(Number(item.vote_average))
+											? Number(item.vote_average).toFixed(1)
+											: '0.0'}
 										/>
 										<Genres
-											data={item.genre_ids.slice(0, 2)}
+											data={item.genre_ids?.slice(0, 2) || []}
 										/>
 									</div>
 									<div className="textBlock">

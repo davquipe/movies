@@ -1,26 +1,45 @@
-.carouselSection {
+.trendingSection {
 	position: relative;
-	margin-bottom: 70px;
-	& > contentWrapper {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 20px;
-		& > title {
-			font-size: 20px;
-			font-weight: 500;
-			color: var(--black1);
-		}
-		& > seeAll {
-			font-size: 14px;
-			font-weight: 500;
-			color: var(--pink);
-			cursor: pointer;
-		}
-	}
-	.carouselTitle {
-		font-size: 24px;
-		color: white;
-		font-weight: normal;
-	}
+	margin-bottom: clamp(48px, 6vw, 72px);
+	&__header { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+	&__eyebrow { margin-bottom: 6px; color: var(--pink); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+	&__title { color: white; font-size: 24px; font-weight: 600; }
+	&__controls { display: flex; align-items: center; gap: 10px; }
+	&__tabs { display: flex; gap: 3px; max-width: 100%; padding: 4px; overflow-x: auto; border: 1px solid rgba(255,255,255,.08); border-radius: 22px; background: rgba(255,255,255,.04); }
+	&__tab { flex: 0 0 auto; min-height: 32px; padding: 0 12px; border: 0; border-radius: 18px; background: transparent; color: rgba(255,255,255,.68); font: inherit; font-size: 12px; cursor: pointer; transition: background .2s ease, color .2s ease; &:hover { color: #fff; } &--active { background: var(--pink); color: #fff; } }
 }
+
+.trendingPeopleSlider {
+	width: min(100%, 1200px);
+	margin: 0 auto;
+	position: relative;
+	&__arrow { position: absolute; top: 63px; z-index: 2; display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid rgba(255,255,255,.15); border-radius: 50%; background: rgba(4,21,45,.88); color: white; cursor: pointer; transition: background .2s ease, transform .2s ease; &:hover { transform: scale(1.08); background: var(--pink); } &--left { left: 2px; } &--right { right: 2px; } }
+}
+
+.trendingPeople {
+	width: 100%;
+	display: flex;
+	gap: 16px;
+	overflow-x: auto;
+	padding: 0 20px 12px;
+	scroll-snap-type: x mandatory;
+	&__card { display: flex; flex: 0 0 126px; flex-direction: column; gap: 5px; color: white; text-decoration: none; scroll-snap-align: start; strong { overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; } > span { color: rgba(255,255,255,.55); font-size: 12px; } }
+	&__portrait, &__skeleton { width: 126px; aspect-ratio: 1; margin-bottom: 5px; overflow: hidden; border-radius: 50%; background: rgba(255,255,255,.08); }
+	&__portrait { display: grid; place-items: center; color: rgba(255,255,255,.55); font-size: 36px; img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; } }
+	&__skeleton { flex: 0 0 126px; animation: trendPulse 1.4s ease-in-out infinite alternate; }
+}
+
+@keyframes trendPulse { to { background: rgba(255,255,255,.16); } }
+
+@media (max-width: 680px) {
+	.trendingSection {
+		&__header { align-items: flex-start; flex-direction: column; gap: 14px; }
+		&__controls { width: 100%; align-items: flex-start; flex-direction: column; }
+		&__tabs { width: 100%; }
+		&__tabs--period { width: auto; }
+	}
+	.trendingPeople { gap: 12px; &__card { flex-basis: 106px; } &__portrait, &__skeleton { width: 106px; } &__skeleton { flex-basis: 106px; } }
+	.trendingPeopleSlider__arrow { top: 53px; width: 30px; height: 30px; }
+}
+
+@media (prefers-reduced-motion: reduce) { .trendingPeople__skeleton { animation: none; } }

@@ -14,16 +14,13 @@ const HeroBanner = () => {
 	const { data, loading } = useFetch('/movie/upcoming')
 
 	useEffect(() => {
-		const bg =
-			url.backdrop +
-			data?.results[Math?.floor(Math.random() * 20)]?.backdrop_path
-		setBackground(bg)
-		// if (data) {
-		// setBackground(
-		// data?.results[Math?.floor(Math.random() * 20)]?.backdrop_path,
-		// data?.results[0]?.backdrop_path,
-		// )
-		// }
+		const candidates = data?.results?.filter((item) => item.backdrop_path) || []
+		if (!url.backdrop || candidates.length === 0) {
+			setBackground('')
+			return
+		}
+		const randomMovie = candidates[Math.floor(Math.random() * candidates.length)]
+		setBackground(`${url.backdrop}${randomMovie.backdrop_path}`)
 	}, [data, url.backdrop])
 
 	const searchQueryHandler = (e) => {
@@ -33,7 +30,7 @@ const HeroBanner = () => {
 	}
 	return (
 		<div className="heroBanner">
-			{!loading && (
+			{!loading && background && (
 				<div className="backdrop-img">
 					<Img src={background} />
 				</div>

@@ -10,9 +10,7 @@ const SwitchTabs = ({ data, onTabChange }) => {
 
 	const activeTab = (tab, index) => {
 		setLeft(index * 100)
-		setTimeout(() => {
-			setSelectedTab(index)
-		}, 300)
+		setSelectedTab(index)
 		onTabChange(tab, index)
 	}
 
