@@ -13,7 +13,7 @@
 	}
 	.app-select__control:hover { background: #14345c; }
 	.app-select__control--is-focused { box-shadow: 0 0 0 2px rgba(218, 47, 104, .65); }
-	.app-select__value-container { min-width: 0; padding: 2px 6px; }
+	.app-select__value-container { min-width: 0; padding: 2px 12px; }
 	.app-select__placeholder, .app-select__input-container, .app-select__single-value { color: #fff; }
 	.app-select__single-value { max-width: calc(100% - 8px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 	.app-select__indicator-separator { display: none; }
@@ -26,5 +26,5 @@
 	.app-select__multi-value__remove { color: #fff; &:hover { color: #fff; background: var(--pink); } }
 
 	&__controlIcon { display: grid; flex: 0 0 18px; place-items: center; margin-left: 13px; color: rgba(255,255,255,.72); font-size: 15px; }
-	&__option { display: flex; align-items: center; gap: 10px; min-width: 0; svg, img { display: block; flex: 0 0 19px; width: 19px; height: 19px; object-fit: contain; color: rgba(255,255,255,.76); } img { border-radius: 5px; } span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
+	&__option { display: flex; align-items: center; gap: 10px; min-width: 0; svg, img, .appSelect__flag { display: grid; flex: 0 0 20px; width: 20px; height: 20px; place-items: center; object-fit: cover; color: rgba(255,255,255,.76); } img { border-radius: 4px; } .appSelect__flag { font-size: 17px; line-height: 1; } span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
 }

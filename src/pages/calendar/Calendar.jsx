@@ -18,6 +18,7 @@ const Calendar = () => {
 	const [error, setError] = useState(false)
 	const today = dayjs()
 	const weekEnd = today.add(6, 'day')
+	const regionOptions = [['PE', 'Peru'], ['US', 'United States'], ['MX', 'Mexico'], ['AR', 'Argentina'], ['CL', 'Chile'], ['CO', 'Colombia'], ['ES', 'Spain'], ['BR', 'Brazil']].map(([value, label]) => ({ value, label, flagEmoji: { PE: '🇵🇪', US: '🇺🇸', MX: '🇲🇽', AR: '🇦🇷', CL: '🇨🇱', CO: '🇨🇴', ES: '🇪🇸', BR: '🇧🇷' }[value], showIconInValue: true }))
 
 	useEffect(() => {
 		let active = true
@@ -78,7 +79,7 @@ const Calendar = () => {
 						<h1>Release calendar</h1>
 						<p className="releaseCalendar__description">The next stories to add to your watchlist.</p>
 					</div>
-					{activeTab === 'movies' && <label className="releaseCalendar__region"><span>Movie release region</span><AppSelect aria-label="Movie release region" icon={BsGlobe} options={[['PE', 'Peru'], ['US', 'United States'], ['MX', 'Mexico'], ['AR', 'Argentina'], ['CL', 'Chile'], ['CO', 'Colombia'], ['ES', 'Spain'], ['BR', 'Brazil']].map(([value, label]) => ({ value, label, icon: BsGlobe }))} value={{ value: region, label: ({ PE: 'Peru', US: 'United States', MX: 'Mexico', AR: 'Argentina', CL: 'Chile', CO: 'Colombia', ES: 'Spain', BR: 'Brazil' })[region] || region }} onChange={changeRegion} isSearchable={false} /></label>}
+					{activeTab === 'movies' && <label className="releaseCalendar__region"><span>Movie release region</span><AppSelect aria-label="Movie release region" icon={BsGlobe} options={regionOptions} value={regionOptions.find((item) => item.value === region) || regionOptions[0]} onChange={changeRegion} isSearchable={false} /></label>}
 				</header>
 				<div className="releaseCalendar__tabs" role="tablist" aria-label="Calendar content">
 					<button className={activeTab === 'movies' ? 'releaseCalendar__tab releaseCalendar__tab--active' : 'releaseCalendar__tab'} type="button" role="tab" aria-selected={activeTab === 'movies'} onClick={() => setActiveTab('movies')}><BsFilm aria-hidden="true" /> Upcoming movies</button>

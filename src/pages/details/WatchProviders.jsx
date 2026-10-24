@@ -12,6 +12,8 @@ const regions = [
 	{ value: 'ES', label: 'Spain' }, { value: 'BR', label: 'Brazil' },
 ]
 
+const withFlag = (region) => ({ ...region, flagEmoji: { PE: '🇵🇪', US: '🇺🇸', MX: '🇲🇽', AR: '🇦🇷', CL: '🇨🇱', CO: '🇨🇴', ES: '🇪🇸', BR: '🇧🇷' }[region.value], showIconInValue: true })
+
 const WatchProviders = ({ mediaType, id }) => {
 	const [region, setRegion] = useState(() => localStorage.getItem('movies-region') || 'PE')
 	const [providers, setProviders] = useState(null)
@@ -44,7 +46,7 @@ const WatchProviders = ({ mediaType, id }) => {
 		<section className="watchProviders">
 			<div className="watchProvidersHeader">
 				<div><h2>Where to watch</h2><p>Streaming availability varies by region.</p></div>
-				<label className="watchProvidersHeader__region"><span>Region</span><AppSelect aria-label="Region" icon={BsGlobe} options={regions.map((item) => ({ ...item, icon: BsGlobe }))} value={regions.find((item) => item.value === region)} onChange={changeRegion} isSearchable={false} /></label>
+				<label className="watchProvidersHeader__region"><span>Region</span><AppSelect aria-label="Region" icon={BsGlobe} options={regions.map(withFlag)} value={withFlag(regions.find((item) => item.value === region) || regions[0])} onChange={changeRegion} isSearchable={false} /></label>
 			</div>
 			{loading ? <p className="providerMessage">Loading availability…</p> : options.length ? (
 				<div className="providerList">

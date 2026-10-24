@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
-import { BsGlobe, BsTags, BsTv } from 'react-icons/bs'
+import { BsTags, BsTv } from 'react-icons/bs'
 import ContentWrapper from '../../../components/contentWrapper/ContentWrapper'
 import AppSelect from '../../../components/appSelect/AppSelect'
 import Carousel from '../../../components/carousel/Carousel'
@@ -72,7 +72,7 @@ const Trending = () => {
 				</div>
 				{!people && <div className="trendingSection__filters" aria-label="Filter trending titles">
 					<label><span>Genre</span><AppSelect aria-label="Genre" icon={BsTags} options={(genresData?.genres || []).map((item) => ({ value: String(item.id), label: item.name, icon: BsTags }))} value={genre ? { value: genre, label: genresData?.genres?.find((item) => String(item.id) === genre)?.name } : null} onChange={(option) => setGenre(option?.value || '')} placeholder="All genres" isClearable /></label>
-					<label><span>Country</span><AppSelect aria-label="Country" icon={BsGlobe} options={countries.map((item) => ({ value: item.iso_3166_1, label: item.english_name, icon: BsGlobe }))} value={country ? { value: country, label: countries.find((item) => item.iso_3166_1 === country)?.english_name } : null} onChange={(option) => { setCountry(option?.value || ''); setProvider('') }} placeholder="Any country" isClearable /></label>
+					<label><span>Country</span><AppSelect aria-label="Country" options={countries.map((item) => ({ value: item.iso_3166_1, label: item.english_name, flag: item.iso_3166_1, showImageInValue: true }))} value={country ? { value: country, label: countries.find((item) => item.iso_3166_1 === country)?.english_name, flag: country, showImageInValue: true } : null} onChange={(option) => { setCountry(option?.value || ''); setProvider('') }} placeholder="Any country" isClearable /></label>
 					<label><span>Streaming service</span><AppSelect aria-label="Streaming service" icon={BsTv} options={providers.map((item) => ({ value: String(item.provider_id), label: item.provider_name, image: item.logo_path ? `https://image.tmdb.org/t/p/w92${item.logo_path}` : null }))} value={provider ? { value: provider, label: providers.find((item) => String(item.provider_id) === provider)?.provider_name } : null} onChange={(option) => setProvider(option?.value || '')} placeholder="All services" isClearable isDisabled={!country} /></label>
 					{hasFilters && <button type="button" className="trendingSection__clear" onClick={() => { setGenre(''); setCountry(''); setProvider('') }}>Clear filters</button>}
 				</div>}

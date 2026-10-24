@@ -13,6 +13,9 @@ const regions = [
 	{ code: 'ES', name: 'Spain' }, { code: 'BR', name: 'Brazil' },
 ]
 
+const regionFlags = { PE: '🇵🇪', US: '🇺🇸', MX: '🇲🇽', AR: '🇦🇷', CL: '🇨🇱', CO: '🇨🇴', ES: '🇪🇸', BR: '🇧🇷' }
+const withFlag = (region) => ({ value: region.code, label: region.name, flagEmoji: regionFlags[region.code], showIconInValue: true })
+
 const getAvatarUrl = (path) => {
 	if (!path) return null
 	if (path.startsWith('/https://')) return path.slice(1)
@@ -60,7 +63,7 @@ const DetailsInsights = ({ mediaType, id, title }) => {
 			<ContentWrapper>
 				<header className="detailsInsights__header">
 					<div><p className="detailsInsights__eyebrow">More to explore</p><h2 className="detailsInsights__title">Details &amp; community</h2></div>
-					<label className="detailsInsights__region"><span>Region</span><AppSelect aria-label="Region" icon={BsGlobe} options={regions.map((item) => ({ value: item.code, label: item.name, icon: BsGlobe }))} value={{ value: region, label: selectedRegion.name }} onChange={updateRegion} isSearchable={false} /></label>
+					<label className="detailsInsights__region"><span>Region</span><AppSelect aria-label="Region" icon={BsGlobe} options={regions.map(withFlag)} value={withFlag(selectedRegion)} onChange={updateRegion} isSearchable={false} /></label>
 				</header>
 				<div className="detailsInsights__grid">
 					<section className="detailsInsights__panel detailsInsights__panel--local">

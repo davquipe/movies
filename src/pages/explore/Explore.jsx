@@ -12,10 +12,10 @@ import { fetchDataApi } from '../../utils/api'
 import './Explore.scss'
 
 const regions = [
-	{ value: 'PE', label: 'Peru' }, { value: 'US', label: 'United States' },
-	{ value: 'MX', label: 'Mexico' }, { value: 'AR', label: 'Argentina' },
-	{ value: 'CL', label: 'Chile' }, { value: 'CO', label: 'Colombia' },
-	{ value: 'ES', label: 'Spain' }, { value: 'BR', label: 'Brazil' },
+	{ value: 'PE', label: 'Peru', flagEmoji: '🇵🇪', showIconInValue: true }, { value: 'US', label: 'United States', flagEmoji: '🇺🇸', showIconInValue: true },
+	{ value: 'MX', label: 'Mexico', flagEmoji: '🇲🇽', showIconInValue: true }, { value: 'AR', label: 'Argentina', flagEmoji: '🇦🇷', showIconInValue: true },
+	{ value: 'CL', label: 'Chile', flagEmoji: '🇨🇱', showIconInValue: true }, { value: 'CO', label: 'Colombia', flagEmoji: '🇨🇴', showIconInValue: true },
+	{ value: 'ES', label: 'Spain', flagEmoji: '🇪🇸', showIconInValue: true }, { value: 'BR', label: 'Brazil', flagEmoji: '🇧🇷', showIconInValue: true },
 ]
 
 const sortOptions = [
@@ -50,7 +50,7 @@ const releaseTypeOptions = [
 // eslint-disable-next-line react/display-name
 const optionFormatter = (Icon, getLabel = (option) => option.label, getImage) => (option, { context }) => (
 	<span className="appSelect__option">
-		{context === 'menu' && (getImage?.(option) ? <img src={getImage(option)} alt="" /> : <Icon aria-hidden="true" />)}
+		{(context === 'menu' || option.showIconInValue) && (option.flagEmoji ? <span className="appSelect__flag" aria-hidden="true">{option.flagEmoji}</span> : getImage?.(option) ? <img src={getImage(option)} alt="" /> : <Icon aria-hidden="true" />)}
 		<span>{getLabel(option)}</span>
 	</span>
 )
