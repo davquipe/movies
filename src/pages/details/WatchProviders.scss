@@ -1,25 +1,27 @@
 .watchProviders {
+	width: 100%;
+	min-width: 0;
 	margin: 24px 0 0;
 	padding: clamp(16px, 2vw, 22px);
 	border-radius: 12px;
 	background: rgba(0, 0, 0, 0.25);
 	color: white;
-	.watchProvidersHeader { display: flex; justify-content: space-between; align-items: center; gap: 14px 20px; flex-wrap: wrap; }
+	.watchProvidersHeader { display: flex; justify-content: space-between; align-items: center; gap: 14px 20px; flex-wrap: wrap; > div { min-width: 0; } }
 	h2 { margin: 0 0 5px; font-size: 18px; }
 	p { margin: 0; color: rgba(255, 255, 255, 0.65); font-size: 13px; }
 	label { display: flex; align-items: center; gap: 8px; color: rgba(255, 255, 255, 0.7); font-size: 13px; }
-	select { padding: 8px 10px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 7px; background: #161616; color: #fff; }
+	select { max-width: 100%; padding: 8px 10px; border-radius: 7px; background: #102747; color: #fff; }
 	.providerList { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 18px; }
-	.providerItem { display: flex; align-items: center; gap: 8px; color: #fff; font-size: 13px; text-decoration: none; img { width: 36px; height: 36px; border-radius: 8px; } }
+	.providerItem { display: flex; align-items: center; gap: 8px; max-width: 100%; color: #fff; font-size: 13px; text-decoration: none; img { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 8px; } span { min-width: 0; overflow-wrap: anywhere; } }
 	.providerMessage { margin-top: 16px; }
 	.providerSource { display: inline-block; margin-top: 16px; color: rgba(255, 255, 255, 0.55); font-size: 11px; }
 }
 
 @media (max-width: 520px) {
 	.watchProviders {
-		.watchProvidersHeader { align-items: flex-start; }
+		.watchProvidersHeader { align-items: flex-start; flex-direction: column; }
 		label { width: 100%; justify-content: space-between; }
-		select { min-width: 120px; }
+		select { width: min(58%, 220px); min-width: 0; }
 		.providerList { gap: 10px; }
 		.providerItem { min-height: 40px; }
 	}

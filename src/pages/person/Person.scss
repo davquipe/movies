@@ -14,7 +14,12 @@
 	&__meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; span { padding: 6px 10px; border: 1px solid rgba(255,255,255,.1); border-radius: 20px; background: rgba(255,255,255,.04); color: rgba(255,255,255,.75); font-size: 11px; } }
 	&__biography { margin-top: 26px; @include sm { margin-top: 32px; } h2 { margin-bottom: 9px; font-size: 17px; } p { max-width: 850px; color: rgba(255,255,255,.68); font-size: 14px; line-height: 1.7; white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; } }
 	&__filmography { padding: 10px 0 56px; }
-	&__sectionHeader { display: flex; align-items: end; justify-content: space-between; margin-bottom: 22px; h2 { margin-top: 5px; font-size: 24px; } span { color: rgba(255,255,255,.5); font-size: 12px; } }
+	&__sectionHeader { display: flex; align-items: end; justify-content: space-between; margin-bottom: 16px; h2 { margin-top: 5px; font-size: 24px; } span { color: rgba(255,255,255,.5); font-size: 12px; } }
+	&__filters { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; margin-bottom: 22px; > label { display: grid; gap: 6px; min-width: 140px; color: rgba(255,255,255,.5); font-size: 10px; } select { height: 36px; padding: 0 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: #102747; color: white; font: inherit; font-size: 12px; } }
+	&__creditTabs { display: flex; gap: 3px; padding: 4px; border: 1px solid rgba(255,255,255,.08); border-radius: 22px; background: rgba(255,255,255,.04); }
+	&__creditTab { min-height: 28px; padding: 0 11px; border: 0; border-radius: 16px; background: transparent; color: rgba(255,255,255,.65); font: inherit; font-size: 11px; cursor: pointer; &--active { background: var(--pink); color: white; } }
 	&__grid { display: flex; flex-flow: row wrap; gap: 10px; @include md { gap: 20px; } }
 	&__message { padding: 40px 0; color: rgba(255,255,255,.65); }
 }
+
+@media (max-width: 560px) { .personPage__filters { align-items: stretch; flex-direction: column; > label { min-width: 0; } select { width: 100%; } } }

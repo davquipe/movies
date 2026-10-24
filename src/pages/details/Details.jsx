@@ -10,6 +10,8 @@ import Similar from './carousels/Similar'
 import WatchProviders from './WatchProviders'
 import DetailsExtras from './DetailsExtras'
 import TvSeasons from './TvSeasons'
+import DetailsInsights from './DetailsInsights'
+import ContentWrapper from '../../components/contentWrapper/ContentWrapper'
 
 const Details = () => {
 	const { mediaType, id } = useParams()
@@ -28,10 +30,11 @@ const Details = () => {
 	return (
 		<>
 			<DetailsBanner video={trailer} crew={credits?.crew} details={details} loading={detailsLoading} />
-			<div className="detailsExtra"><WatchProviders mediaType={mediaType} id={id} /></div>
+			<ContentWrapper><div className="detailsPage__providers"><WatchProviders mediaType={mediaType} id={id} /></div></ContentWrapper>
 			<DetailsExtras data={details} mediaType={mediaType} />
 			{mediaType === 'tv' && <TvSeasons showId={id} seasons={details?.seasons} />}
-			<Cast data={credits?.cast} loading={creditsLoading} />
+			<DetailsInsights mediaType={mediaType} id={id} title={details?.title || details?.name} />
+			<Cast data={credits?.cast} crew={credits?.crew} loading={creditsLoading} />
 			<VideosSection data={data} loading={loading} />
 			<Similar mediaType={mediaType} id={id} />
 			<Recommendation mediaType={mediaType} id={id} />

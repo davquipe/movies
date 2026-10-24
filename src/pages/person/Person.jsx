@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useParams } from 'react-router-dom'
 import ContentWrapper from '../../components/contentWrapper/ContentWrapper'
@@ -10,18 +10,37 @@ import './Person.scss'
 
 const Person = () => {
 	const { id } = useParams()
+	const [creditType, setCreditType] = useState('all')
+	const [department, setDepartment] = useState('All departments')
+	const [sortBy, setSortBy] = useState('popularity')
 	const { data, loading, error } = useFetch(`/person/${id}`)
 	const { data: credits, loading: creditsLoading } = useFetch(`/person/${id}/combined_credits`)
 	const knownFor = useMemo(() => {
 		const entries = [...(credits?.cast || []), ...(credits?.crew || [])]
 		const unique = new Map()
 		entries.forEach((item) => {
-			if (item.id && item.poster_path && item.media_type && !unique.has(`${item.media_type}-${item.id}`)) {
-				unique.set(`${item.media_type}-${item.id}`, item)
+			const creditKind = item.character ? 'cast' : item.department || 'crew'
+			const key = `${item.media_type}-${item.id}-${creditKind}`
+			if (item.id && item.poster_path && item.media_type && !unique.has(key)) {
+				unique.set(key, item)
 			}
 		})
 		return [...unique.values()].sort((a, b) => (b.popularity || 0) - (a.popularity || 0))
 	}, [credits])
+	const departments = useMemo(() => ['All departments', ...new Set(knownFor.filter((item) => !item.character).map((item) => item.department).filter(Boolean))], [knownFor])
+	const visibleCredits = useMemo(() => {
+		const filtered = knownFor.filter((item) => {
+			if (creditType === 'cast' && !item.character) return false
+			if (creditType === 'crew' && item.character) return false
+			if (creditType === 'crew' && department !== 'All departments' && item.department !== department) return false
+			return true
+		})
+		return filtered.sort((a, b) => {
+			if (sortBy === 'rating') return (b.vote_average || 0) - (a.vote_average || 0)
+			if (sortBy === 'newest') return (b.release_date || b.first_air_date || '').localeCompare(a.release_date || a.first_air_date || '')
+			return (b.popularity || 0) - (a.popularity || 0)
+		})
+	}, [knownFor, creditType, department, sortBy])
 	const portrait = data?.profile_path
 		? `https://image.tmdb.org/t/p/w500${data.profile_path}`
 		: avatar
@@ -48,8 +67,13 @@ const Person = () => {
 			</section>
 			<section className="personPage__filmography">
 				<ContentWrapper>
-					<div className="personPage__sectionHeader"><div><p className="personPage__eyebrow">On screen</p><h2>Known for</h2></div><span>{knownFor.length} titles</span></div>
-					{creditsLoading ? <Spinner /> : knownFor.length ? <div className="personPage__grid">{knownFor.map((item) => <MovieCard key={`${item.media_type}-${item.id}`} data={item} mediaType={item.media_type} />)}</div> : <p className="personPage__message">No filmography is available yet.</p>}
+					<div className="personPage__sectionHeader"><div><p className="personPage__eyebrow">Filmography</p><h2>Credits</h2></div><span>{visibleCredits.length} titles</span></div>
+					<div className="personPage__filters" aria-label="Filter filmography">
+						<div className="personPage__creditTabs" role="tablist" aria-label="Credit type">{[{ id: 'all', label: 'All credits' }, { id: 'cast', label: 'Acting' }, { id: 'crew', label: 'Crew' }].map((tab) => <button type="button" role="tab" aria-selected={creditType === tab.id} className={creditType === tab.id ? 'personPage__creditTab personPage__creditTab--active' : 'personPage__creditTab'} key={tab.id} onClick={() => { setCreditType(tab.id); setDepartment('All departments') }}>{tab.label}</button>)}</div>
+						{creditType === 'crew' && departments.length > 1 && <label><span>Department</span><select value={department} onChange={(event) => setDepartment(event.target.value)}>{departments.map((item) => <option key={item}>{item}</option>)}</select></label>}
+						<label><span>Sort by</span><select value={sortBy} onChange={(event) => setSortBy(event.target.value)}><option value="popularity">Popularity</option><option value="newest">Newest</option><option value="rating">Top rated</option></select></label>
+					</div>
+					{creditsLoading ? <Spinner /> : visibleCredits.length ? <div className="personPage__grid">{visibleCredits.map((item, index) => <MovieCard key={`${item.media_type}-${item.id}-${item.character ? 'cast' : item.department || 'crew'}-${index}`} data={item} mediaType={item.media_type} />)}</div> : <p className="personPage__message">No credits match these filters.</p>}
 				</ContentWrapper>
 			</section>
 		</main>
