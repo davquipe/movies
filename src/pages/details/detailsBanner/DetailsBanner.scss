@@ -1,5 +1,7 @@
 @import '../../../../mixins.scss';
 .detailsBanner {
+	position: relative;
+	isolation: isolate;
 	width: 100%;
 	background-color: var(--black);
 	padding-top: 100px;
@@ -37,6 +39,8 @@
 			#04152d 79.17%
 		);
 		position: absolute;
+		z-index: 0;
+		pointer-events: none;
 		bottom: 0;
 		left: 0;
 	}
@@ -44,6 +48,7 @@
 	.content {
 		display: flex;
 		position: relative;
+		z-index: 1;
 		flex-direction: column;
 		gap: 25px;
 		@include md {

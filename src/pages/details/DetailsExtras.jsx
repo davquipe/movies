@@ -39,15 +39,20 @@ const DetailsExtras = ({ data, mediaType }) => {
 
 	return (
 		<>
-			{galleries.length > 0 && <section className="detailsExtras">
+			{galleries.length > 0 && <section className="detailsExtras detailsExtras--gallery">
 				<ContentWrapper>
 					<div className="detailsExtras__header"><div><p className="detailsExtras__eyebrow">Take a closer look</p><h2 className="detailsExtras__title">Images</h2></div><div className="detailsExtras__tabs" role="tablist" aria-label="Image types">
 						{galleries.map((item) => <button key={item.id} type="button" role="tab" aria-selected={activeGallery?.id === item.id} className={`detailsExtras__tab ${activeGallery?.id === item.id ? 'detailsExtras__tab--active' : ''}`} onClick={() => setGallery(item.id)}>{item.label}<span>{item.items.length}</span></button>)}
 					</div></div>
-					<div className={`detailsExtras__gallery detailsExtras__gallery--${activeGallery?.id}`}>
-						{activeGallery?.items.slice(0, 16).map((image) => <button key={image.file_path} className="detailsExtras__image" type="button" onClick={() => setSelectedImage({ ...image, size: activeGallery.size })} aria-label={`View ${activeGallery.label.toLowerCase()} image`}><img src={`${imageBase}${activeGallery.size}${image.file_path}`} alt="" loading="lazy" /></button>)}
-					</div>
 				</ContentWrapper>
+				<Carousel
+					data={activeGallery?.items.slice(0, 16)}
+					imageMode
+					imageSize={activeGallery?.size}
+					imageAspectRatio={activeGallery?.id === 'posters' ? '2 / 3' : activeGallery?.id === 'logos' ? '16 / 7' : '16 / 9'}
+					imageVariant={activeGallery?.id}
+					onImageClick={setSelectedImage}
+				/>
 			</section>}
 
 			{keywords.length > 0 && <section className="detailsExtras detailsExtras--keywords">

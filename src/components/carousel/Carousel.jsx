@@ -17,7 +17,7 @@ import Genres from '../genres/Genres'
 
 import './Carousel.scss'
 
-const Carousel = ({ data, loading, endpoint, title }) => {
+const Carousel = ({ data, loading, endpoint, title, imageMode = false, onImageClick, imageSize = 'w780', imageAspectRatio = '16 / 9', imageVariant = 'backdrops' }) => {
 	const carouselContainer = useRef()
 	const { url } = useSelector((state) => state.home)
 	const navigate = useNavigate()
@@ -49,7 +49,7 @@ const Carousel = ({ data, loading, endpoint, title }) => {
 	}
 
 	return (
-		<div className="carousel">
+		<div className={`carousel ${imageMode ? 'carousel--images' : ''}`}>
 			<ContentWrapper>
 				{title && <div className="carouselTitle">{title}</div>}
 				<BsFillArrowLeftCircleFill
@@ -63,6 +63,24 @@ const Carousel = ({ data, loading, endpoint, title }) => {
 				{!loading ? (
 					<div className="carouselItems" ref={carouselContainer}>
 						{data?.map((item) => {
+							if (imageMode) {
+								return (
+									<button
+										key={item.file_path}
+										className={`carousel__imageItem carousel__imageItem--${imageVariant}`}
+										type="button"
+										onClick={() => onImageClick?.(item)}
+										style={{ aspectRatio: imageAspectRatio }}
+										aria-label="Open image preview">
+										<img
+											className="carousel__image"
+											loading="lazy"
+											src={`https://image.tmdb.org/t/p/${imageSize}${item.file_path}`}
+											alt=""
+										/>
+									</button>
+								)
+							}
 							const posterUrl = item.poster_path
 								? url.poster + item.poster_path
 								: PosterFallback
