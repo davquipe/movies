@@ -114,7 +114,7 @@ const Header = () => {
 						<div className="searchInput">
 							<input
 								type="text"
-								placeholder="Search for a movie, tv show, person......"
+								placeholder="Search titles, people, or IMDb IDs (tt… / nm…)"
 								onChange={(e) => setQuery(e.target.value)}
 								onKeyUp={searchQueryHandler}
 							/>

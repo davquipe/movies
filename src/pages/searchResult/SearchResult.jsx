@@ -16,9 +16,15 @@ const tabs = [
 	{ id: 'person', label: 'People' },
 ]
 
+const getImdbId = (value) => {
+	const match = value.trim().match(/^(?:(?:https?:\/\/)?(?:www\.)?imdb\.com\/(?:title|name)\/)?((?:tt|nm)\d+)(?:[/?#].*)?$/i)
+	return match?.[1]?.toLowerCase() || null
+}
+
 const SearchResult = () => {
 	const { query = '' } = useParams()
 	const searchTerm = query
+	const imdbId = getImdbId(searchTerm)
 	const [data, setData] = useState({ results: [], total_pages: 0, total_results: 0 })
 	const [page, setPage] = useState(1)
 	const [loading, setLoading] = useState(true)
@@ -28,17 +34,30 @@ const SearchResult = () => {
 	const loadPage = useCallback(async (requestedPage, append = false) => {
 		const currentRequest = ++requestId.current
 		setLoading(true)
-		const response = await fetchDataApi('/search/multi', {
-			params: { query: searchTerm, page: requestedPage, include_adult: false },
-		})
+		const response = imdbId
+			? await fetchDataApi(`/find/${imdbId}`, { params: { external_source: 'imdb_id' } })
+			: await fetchDataApi('/search/multi', {
+				params: { query: searchTerm, page: requestedPage, include_adult: false },
+			})
 		if (currentRequest === requestId.current && response) {
+			const normalizedResponse = imdbId
+				? {
+					results: [
+						...(response.movie_results || []).map((item) => ({ ...item, media_type: 'movie' })),
+						...(response.tv_results || []).map((item) => ({ ...item, media_type: 'tv' })),
+						...(response.person_results || []).map((item) => ({ ...item, media_type: 'person' })),
+					],
+					total_pages: 1,
+					total_results: (response.movie_results?.length || 0) + (response.tv_results?.length || 0) + (response.person_results?.length || 0),
+				}
+				: response
 			setData((current) => append
-				? { ...response, results: [...current.results, ...(response.results || [])] }
-				: response)
+				? { ...normalizedResponse, results: [...current.results, ...(normalizedResponse.results || [])] }
+				: normalizedResponse)
 			setPage(requestedPage + 1)
 		}
 		if (currentRequest === requestId.current) setLoading(false)
-	}, [searchTerm])
+	}, [searchTerm, imdbId])
 
 	useEffect(() => {
 		setActiveTab('all')
@@ -55,14 +74,14 @@ const SearchResult = () => {
 		? data.results
 		: data.results.filter((item) => item.media_type === activeTab)
 	const hasMore = page <= data.total_pages
-	const title = `Search results for “${searchTerm}”`
+	const title = imdbId ? `IMDb lookup: ${imdbId}` : `Search results for “${searchTerm}”`
 
 	return (
 		<main className="searchResultsPage">
 			<Helmet><title>{title}</title></Helmet>
 			<ContentWrapper>
 				<header className="searchResultsPage__header">
-					<div><p className="searchResultsPage__eyebrow">Discover something new</p><h1 className="searchResultsPage__title">Results for <span>“{searchTerm}”</span></h1></div>
+					<div><p className="searchResultsPage__eyebrow">{imdbId ? 'IMDb lookup' : 'Discover something new'}</p><h1 className="searchResultsPage__title">{imdbId ? <>Matching title for <span>{imdbId}</span></> : <>Results for <span>“{searchTerm}”</span></>}</h1></div>
 					{!loading && <p className="searchResultsPage__count">{data.total_results || 0} results</p>}
 				</header>
 				{data.results.length > 0 && <div className="searchResultsPage__tabs" role="tablist" aria-label="Filter search results">
