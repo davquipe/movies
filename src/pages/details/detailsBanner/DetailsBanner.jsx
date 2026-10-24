@@ -8,7 +8,6 @@ import dayjs from 'dayjs'
 import './DetailsBanner.scss'
 
 import ContentWrapper from '../../../components/contentWrapper/ContentWrapper'
-import useFetch from '../../../hooks/useFetch'
 import Genres from '../../../components/genres/Genres'
 import CircleRating from '../../../components/circleRating/CircleRating'
 import Img from '../../../components/lazyLoadImage/Img.jsx'
@@ -18,12 +17,11 @@ import { PlayIcon } from '../Playbtn'
 import VideoPopup from '../../../components/videoPopup/VideoPopup'
 // import VideoPopup from '../../../components/videoPopup/VideoPopup'
 
-const DetailsBanner = ({ video, crew }) => {
+const DetailsBanner = ({ video, crew, details: data, loading }) => {
 	const [show, setShow] = useState(false)
 	const [videoId, setVideoId] = useState(null)
 
 	const { mediaType, id } = useParams()
-	const { data, loading } = useFetch(`/${mediaType}/${id}`)
 
 	const { url } = useSelector((state) => state.home)
 
