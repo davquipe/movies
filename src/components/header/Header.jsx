@@ -43,11 +43,10 @@ const Header = () => {
 	}, [controlNavbar])
 
 	const searchQueryHandler = (e) => {
-		if (e.key === 'Enter' && query.length > 0) {
-			navigate(`/search/${query}`)
-			setTimeout(() => {
-				setShowSearch(false)
-			}, 1000)
+		const searchTerm = query.trim()
+		if (e.key === 'Enter' && searchTerm.length > 0) {
+			navigate(`/search/${encodeURIComponent(searchTerm)}`)
+			setShowSearch(false)
 		}
 	}
 
