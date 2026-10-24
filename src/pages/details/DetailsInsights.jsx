@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useMemo, useState } from 'react'
 import { BsArrowUpRight, BsStarFill } from 'react-icons/bs'
+import { BsGlobe } from 'react-icons/bs'
 import ContentWrapper from '../../components/contentWrapper/ContentWrapper'
+import AppSelect from '../../components/appSelect/AppSelect'
 import useFetch from '../../hooks/useFetch'
 import './DetailsInsights.scss'
 
@@ -48,8 +50,9 @@ const DetailsInsights = ({ mediaType, id, title }) => {
 	].filter(Boolean)
 
 	const updateRegion = (event) => {
-		setRegion(event.target.value)
-		localStorage.setItem('movies-region', event.target.value)
+		const value = event?.value || 'PE'
+		setRegion(value)
+		localStorage.setItem('movies-region', value)
 	}
 
 	return (
@@ -57,7 +60,7 @@ const DetailsInsights = ({ mediaType, id, title }) => {
 			<ContentWrapper>
 				<header className="detailsInsights__header">
 					<div><p className="detailsInsights__eyebrow">More to explore</p><h2 className="detailsInsights__title">Details &amp; community</h2></div>
-					<label className="detailsInsights__region"><span>Region</span><select value={region} onChange={updateRegion}>{regions.map((item) => <option value={item.code} key={item.code}>{item.name}</option>)}</select></label>
+					<label className="detailsInsights__region"><span>Region</span><AppSelect aria-label="Region" icon={BsGlobe} options={regions.map((item) => ({ value: item.code, label: item.name, icon: BsGlobe }))} value={{ value: region, label: selectedRegion.name }} onChange={updateRegion} isSearchable={false} /></label>
 				</header>
 				<div className="detailsInsights__grid">
 					<section className="detailsInsights__panel detailsInsights__panel--local">

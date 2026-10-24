@@ -32,19 +32,9 @@
 
 	&__select {
 		min-width: 0;
-		&--genres, &--sort, &--language, &--region, &--provider, &--availability { width: 100%; }
+		&--genres, &--sort, &--language, &--region, &--provider, &--availability, &--field { width: 100%; }
 		&--sort { min-width: 0; }
 		&--language { min-width: 0; }
-		.react-select__control { min-height: 40px; border: 1px solid rgba(255,255,255,.07); background: #102b50; border-radius: 22px; box-shadow: none; }
-		.react-select__control:hover { border-color: rgba(255,255,255,.2); }
-		.react-select__value-container { padding: 2px 12px; }
-		.react-select__placeholder, .react-select__input-container, .react-select__single-value { color: #fff; }
-		.react-select__multi-value { background: var(--black-lighter); border-radius: 12px; }
-		.react-select__multi-value__label { color: #fff; }
-		.react-select__multi-value__remove { color: #fff; &:hover { color: #fff; background: var(--pink); } }
-		.react-select__menu { z-index: 20; overflow: hidden; background: #102b50; border-radius: 12px; }
-		.react-select__option { color: #fff; background: #102b50; &:hover, &--is-focused { background: #1c4b91; } &--is-selected { background: var(--pink); } }
-		.react-select__indicator { color: rgba(255,255,255,.7); &:hover { color: #fff; } }
 	}
 
 	&__field {
@@ -56,16 +46,15 @@
 		font-size: 11px;
 		input, select {
 			width: 100%; min-width: 0; height: 40px; padding: 0 12px;
-			border: 1px solid rgba(255,255,255,.07); border-radius: 22px;
+			border-radius: 22px;
 			background: #102b50; color: #fff; font: inherit; font-size: 13px;
-			&:focus { outline: 2px solid rgba(218,47,104,.7); outline-offset: 1px; }
+			&:focus { outline: 2px solid rgba(218,47,104,.7); outline-offset: 2px; }
 		}
 	}
 
 	&__streaming {
 		margin: 0 0 28px;
 		padding: 18px;
-		border: 1px solid rgba(255,255,255,.07);
 		border-radius: 16px;
 		background: linear-gradient(115deg, rgba(16,43,80,.92), rgba(7,25,49,.82));
 		@include md { padding: 20px 22px; }
@@ -78,9 +67,9 @@
 	&__providerSelect {
 		display: flex; min-width: 0; flex-direction: column; gap: 6px;
 	}
-	&__clear { align-self: end; min-height: 40px; padding: 0 12px; border: 1px solid rgba(255,255,255,.12); border-radius: 20px; background: transparent; color: rgba(255,255,255,.72); font: inherit; font-size: 12px; cursor: pointer; &:hover { color: #fff; border-color: rgba(255,255,255,.35); } }
+	&__clear { align-self: end; min-height: 40px; padding: 0 12px; border-radius: 20px; background: rgba(255,255,255,.06); color: rgba(255,255,255,.72); font: inherit; font-size: 12px; cursor: pointer; &:hover { background: rgba(255,255,255,.12); color: #fff; } }
 	&__providerRail { display: flex; gap: 9px; margin: 15px -2px -2px; padding: 2px 2px 8px; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.2) transparent; }
-	&__providerChip { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; min-height: 42px; padding: 5px 12px 5px 6px; border: 1px solid rgba(255,255,255,.1); border-radius: 24px; background: rgba(4,21,45,.62); color: rgba(255,255,255,.8); font: inherit; font-size: 12px; cursor: pointer; transition: background .18s ease, border-color .18s ease, transform .18s ease; &:hover { border-color: rgba(255,255,255,.35); transform: translateY(-1px); } img { display: block; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; object-fit: cover; } span { display: flex; align-items: center; min-height: 30px; white-space: nowrap; } &--active { border-color: var(--pink); background: rgba(218,47,104,.2); color: #fff; box-shadow: 0 0 0 1px var(--pink); } }
+	&__providerChip { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 8px; min-height: 42px; padding: 5px 12px 5px 6px; border-radius: 24px; background: rgba(4,21,45,.62); color: rgba(255,255,255,.8); font: inherit; font-size: 12px; cursor: pointer; transition: background .18s ease, transform .18s ease; &:hover { background: rgba(28,75,145,.7); transform: translateY(-1px); } img { display: block; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; object-fit: cover; } span { display: flex; align-items: center; min-height: 30px; white-space: nowrap; } &--active { background: rgba(218,47,104,.42); color: #fff; } }
 	&__activeFilter { margin: -10px 0 20px; color: rgba(255,255,255,.65); font-size: 13px; strong { color: #fff; } }
 	&__empty { padding: 40px 0; color: rgba(255,255,255,.66); font-size: 16px; }
 	&__results { display: flex; flex-flow: row wrap; gap: 10px; margin-bottom: 50px; @include md { gap: 20px; } .movieCard .posterBlock { margin-bottom: 30px; } }

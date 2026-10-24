@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import dayjs from 'dayjs'
-import { BsCalendar3, BsFilm, BsTv } from 'react-icons/bs'
+import { BsCalendar3, BsFilm, BsGlobe, BsTv } from 'react-icons/bs'
 import ContentWrapper from '../../components/contentWrapper/ContentWrapper'
+import AppSelect from '../../components/appSelect/AppSelect'
 import Spinner from '../../components/spinner/Spinner'
 import { fetchDataApi } from '../../utils/api'
 import './Calendar.scss'
@@ -62,8 +63,9 @@ const Calendar = () => {
 	}, {}), [items, activeTab])
 
 	const changeRegion = (event) => {
-		setRegion(event.target.value)
-		localStorage.setItem('movies-region', event.target.value)
+		const value = event?.value || 'PE'
+		setRegion(value)
+		localStorage.setItem('movies-region', value)
 	}
 
 	return (
@@ -76,7 +78,7 @@ const Calendar = () => {
 						<h1>Release calendar</h1>
 						<p className="releaseCalendar__description">The next stories to add to your watchlist.</p>
 					</div>
-					{activeTab === 'movies' && <label className="releaseCalendar__region"><span>Movie release region</span><select value={region} onChange={changeRegion}><option value="PE">Peru</option><option value="US">United States</option><option value="MX">Mexico</option><option value="AR">Argentina</option><option value="CL">Chile</option><option value="CO">Colombia</option><option value="ES">Spain</option><option value="BR">Brazil</option></select></label>}
+					{activeTab === 'movies' && <label className="releaseCalendar__region"><span>Movie release region</span><AppSelect aria-label="Movie release region" icon={BsGlobe} options={[['PE', 'Peru'], ['US', 'United States'], ['MX', 'Mexico'], ['AR', 'Argentina'], ['CL', 'Chile'], ['CO', 'Colombia'], ['ES', 'Spain'], ['BR', 'Brazil']].map(([value, label]) => ({ value, label, icon: BsGlobe }))} value={{ value: region, label: ({ PE: 'Peru', US: 'United States', MX: 'Mexico', AR: 'Argentina', CL: 'Chile', CO: 'Colombia', ES: 'Spain', BR: 'Brazil' })[region] || region }} onChange={changeRegion} isSearchable={false} /></label>}
 				</header>
 				<div className="releaseCalendar__tabs" role="tablist" aria-label="Calendar content">
 					<button className={activeTab === 'movies' ? 'releaseCalendar__tab releaseCalendar__tab--active' : 'releaseCalendar__tab'} type="button" role="tab" aria-selected={activeTab === 'movies'} onClick={() => setActiveTab('movies')}><BsFilm aria-hidden="true" /> Upcoming movies</button>

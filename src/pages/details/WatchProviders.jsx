@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react'
+import { BsGlobe } from 'react-icons/bs'
+import AppSelect from '../../components/appSelect/AppSelect'
 import { fetchDataApi } from '../../utils/api'
 import './WatchProviders.scss'
 
@@ -28,8 +30,9 @@ const WatchProviders = ({ mediaType, id }) => {
 	}, [mediaType, id, region])
 
 	const changeRegion = (event) => {
-		setRegion(event.target.value)
-		localStorage.setItem('movies-region', event.target.value)
+		const value = event?.value || 'PE'
+		setRegion(value)
+		localStorage.setItem('movies-region', value)
 	}
 
 	const options = [...new Map([
@@ -41,7 +44,7 @@ const WatchProviders = ({ mediaType, id }) => {
 		<section className="watchProviders">
 			<div className="watchProvidersHeader">
 				<div><h2>Where to watch</h2><p>Streaming availability varies by region.</p></div>
-				<label>Region<select value={region} onChange={changeRegion}>{regions.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></label>
+				<label className="watchProvidersHeader__region"><span>Region</span><AppSelect aria-label="Region" icon={BsGlobe} options={regions.map((item) => ({ ...item, icon: BsGlobe }))} value={regions.find((item) => item.value === region)} onChange={changeRegion} isSearchable={false} /></label>
 			</div>
 			{loading ? <p className="providerMessage">Loading availability…</p> : options.length ? (
 				<div className="providerList">

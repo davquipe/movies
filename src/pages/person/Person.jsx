@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useParams } from 'react-router-dom'
 import ContentWrapper from '../../components/contentWrapper/ContentWrapper'
+import AppSelect from '../../components/appSelect/AppSelect'
+import { BsBriefcase, BsCalendar3, BsSortDown, BsStar } from 'react-icons/bs'
 import MovieCard from '../../components/movieCard/MovieCard'
 import Spinner from '../../components/spinner/Spinner'
 import useFetch from '../../hooks/useFetch'
@@ -70,8 +72,8 @@ const Person = () => {
 					<div className="personPage__sectionHeader"><div><p className="personPage__eyebrow">Filmography</p><h2>Credits</h2></div><span>{visibleCredits.length} titles</span></div>
 					<div className="personPage__filters" aria-label="Filter filmography">
 						<div className="personPage__creditTabs" role="tablist" aria-label="Credit type">{[{ id: 'all', label: 'All credits' }, { id: 'cast', label: 'Acting' }, { id: 'crew', label: 'Crew' }].map((tab) => <button type="button" role="tab" aria-selected={creditType === tab.id} className={creditType === tab.id ? 'personPage__creditTab personPage__creditTab--active' : 'personPage__creditTab'} key={tab.id} onClick={() => { setCreditType(tab.id); setDepartment('All departments') }}>{tab.label}</button>)}</div>
-						{creditType === 'crew' && departments.length > 1 && <label><span>Department</span><select value={department} onChange={(event) => setDepartment(event.target.value)}>{departments.map((item) => <option key={item}>{item}</option>)}</select></label>}
-						<label><span>Sort by</span><select value={sortBy} onChange={(event) => setSortBy(event.target.value)}><option value="popularity">Popularity</option><option value="newest">Newest</option><option value="rating">Top rated</option></select></label>
+						{creditType === 'crew' && departments.length > 1 && <label><span>Department</span><AppSelect aria-label="Department" icon={BsBriefcase} options={departments.map((item) => ({ value: item, label: item, icon: BsBriefcase }))} value={{ value: department, label: department }} onChange={(option) => setDepartment(option?.value || 'All departments')} /></label>}
+						<label><span>Sort by</span><AppSelect aria-label="Sort credits" icon={BsSortDown} options={[{ value: 'popularity', label: 'Popularity', icon: BsSortDown }, { value: 'newest', label: 'Newest', icon: BsCalendar3 }, { value: 'rating', label: 'Top rated', icon: BsStar }]} value={{ value: sortBy, label: sortBy === 'newest' ? 'Newest' : sortBy === 'rating' ? 'Top rated' : 'Popularity' }} onChange={(option) => setSortBy(option?.value || 'popularity')} /></label>
 					</div>
 					{creditsLoading ? <Spinner /> : visibleCredits.length ? <div className="personPage__grid">{visibleCredits.map((item, index) => <MovieCard key={`${item.media_type}-${item.id}-${item.character ? 'cast' : item.department || 'crew'}-${index}`} data={item} mediaType={item.media_type} />)}</div> : <p className="personPage__message">No credits match these filters.</p>}
 				</ContentWrapper>

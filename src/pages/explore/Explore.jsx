@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import Select from 'react-select'
+import { BsCalendar3, BsCreditCard, BsFilm, BsGift, BsGlobe, BsMegaphone, BsPlayCircle, BsSortAlphaDown, BsSortDown, BsStar, BsTags, BsTranslate, BsTv } from 'react-icons/bs'
 import { useParams } from 'react-router-dom'
+import AppSelect from '../../components/appSelect/AppSelect'
 import ContentWrapper from '../../components/contentWrapper/ContentWrapper'
 import MovieCard from '../../components/movieCard/MovieCard'
 import Spinner from '../../components/spinner/Spinner'
@@ -41,6 +42,29 @@ const monetizationOptions = [
 	{ value: 'buy', label: 'Buy' },
 ]
 
+const releaseTypeOptions = [
+	{ value: '', label: 'Any release' }, { value: '2|3', label: 'Theatrical' },
+	{ value: '4', label: 'Digital' }, { value: '5', label: 'Physical' }, { value: '6', label: 'TV' },
+]
+
+// eslint-disable-next-line react/display-name
+const optionFormatter = (Icon, getLabel = (option) => option.label, getImage) => (option, { context }) => (
+	<span className="appSelect__option">
+		{context === 'menu' && (getImage?.(option) ? <img src={getImage(option)} alt="" /> : <Icon aria-hidden="true" />)}
+		<span>{getLabel(option)}</span>
+	</span>
+)
+
+const sortOptionFormatter = (option, { context }) => {
+	const Icon = option.value.startsWith('vote_average') ? BsStar : option.value.includes('release') ? BsCalendar3 : option.value.startsWith('original_title') ? BsSortAlphaDown : BsSortDown
+	return <span className="appSelect__option">{context === 'menu' && <Icon aria-hidden="true" />}<span>{option.label}</span></span>
+}
+
+const monetizationOptionFormatter = (option, { context }) => {
+	const Icon = option.value === 'ads' ? BsMegaphone : option.value === 'free' ? BsGift : option.value === 'flatrate' ? BsPlayCircle : BsCreditCard
+	return <span className="appSelect__option">{context === 'menu' && <Icon aria-hidden="true" />}<span>{option.label}</span></span>
+}
+
 const Explore = () => {
 	const { mediaType } = useParams()
 	const title = `Explore ${mediaType === 'tv' ? 'TV Shows' : 'Movies'}`
@@ -66,6 +90,10 @@ const Explore = () => {
 	const { data: genresData } = useFetch(`/genre/${mediaType}/list`)
 	const regionOption = regions.find((item) => item.value === region) || regions[0]
 	const certificationOptions = certificationsByRegion[region] || []
+	const certificationSelectOptions = certificationOptions.filter((item) => item.certification).map((item) => ({
+		value: item.certification,
+		label: item.meaning ? `${item.certification} · ${item.meaning}` : item.certification,
+	}))
 
 	useEffect(() => {
 		let active = true
@@ -146,15 +174,15 @@ const Explore = () => {
 					</div>
 					<div className="explorePage__filters" aria-label="Catalog filters">
 						<div className="explorePage__filterRow explorePage__filterRow--primary">
-							<div className="explorePage__filterGroup explorePage__filterGroup--genres"><span className="explorePage__filterLabel">Genre</span><Select isMulti name="genres" value={genres} closeMenuOnSelect={false} options={genresData?.genres || []} getOptionLabel={(option) => option.name} getOptionValue={(option) => option.id} onChange={(value) => setGenres(value || [])} placeholder="All genres" className={selectClass('explorePage__select--genres')} classNamePrefix="react-select" /></div>
-							<div className="explorePage__filterGroup"><span className="explorePage__filterLabel">Sort</span><Select name="sort" value={sort} options={sortOptions} onChange={setSort} isClearable placeholder="Popularity" className={selectClass('explorePage__select--sort')} classNamePrefix="react-select" /></div>
-							<div className="explorePage__filterGroup"><span className="explorePage__filterLabel">Language</span><Select name="language" value={language} options={languages} onChange={setLanguage} isClearable placeholder="All languages" className={selectClass('explorePage__select--language')} classNamePrefix="react-select" /></div>
+							<div className="explorePage__filterGroup explorePage__filterGroup--genres"><span className="explorePage__filterLabel">Genre</span><AppSelect isMulti name="genres" icon={BsTags} formatOptionLabel={optionFormatter(BsTags, (option) => option.name)} value={genres} closeMenuOnSelect={false} options={genresData?.genres || []} getOptionLabel={(option) => option.name} getOptionValue={(option) => option.id} onChange={(value) => setGenres(value || [])} placeholder="All genres" className={selectClass('explorePage__select--genres')}  /></div>
+							<div className="explorePage__filterGroup"><span className="explorePage__filterLabel">Sort</span><AppSelect name="sort" icon={BsSortDown} formatOptionLabel={sortOptionFormatter} value={sort} options={sortOptions} onChange={setSort} isClearable placeholder="Popularity" className={selectClass('explorePage__select--sort')}  /></div>
+							<div className="explorePage__filterGroup"><span className="explorePage__filterLabel">Language</span><AppSelect name="language" icon={BsTranslate} formatOptionLabel={optionFormatter(BsTranslate)} value={language} options={languages} onChange={setLanguage} isClearable placeholder="All languages" className={selectClass('explorePage__select--language')}  /></div>
 						</div>
 						<div className="explorePage__filterRow explorePage__filterRow--secondary">
 							<label className="explorePage__field"><span className="explorePage__filterLabel">Year</span><input type="number" min="1900" max="2100" placeholder="Any year" value={year} onChange={(event) => setYear(event.target.value)} /></label>
 							<label className="explorePage__field"><span className="explorePage__filterLabel">Minimum rating</span><input type="number" min="0" max="10" step="0.5" placeholder="Any rating" value={rating} onChange={(event) => setRating(event.target.value)} /></label>
-							{mediaType === 'movie' && <label className="explorePage__field"><span className="explorePage__filterLabel">Release type</span><select value={releaseType} onChange={(event) => setReleaseType(event.target.value)}><option value="">Any release</option><option value="2|3">Theatrical</option><option value="4">Digital</option><option value="5">Physical</option><option value="6">TV</option></select></label>}
-							{mediaType === 'movie' && certificationOptions.length > 0 && <label className="explorePage__field"><span className="explorePage__filterLabel">Age rating · {regionOption.label}</span><select value={certification} onChange={(event) => setCertification(event.target.value)}><option value="">Any rating</option>{certificationOptions.filter((item) => item.certification).map((item) => <option key={`${region}-${item.certification}`} value={item.certification}>{item.certification}{item.meaning ? ` · ${item.meaning}` : ''}</option>)}</select></label>}
+							{mediaType === 'movie' && <div className="explorePage__field"><span className="explorePage__filterLabel">Release type</span><AppSelect name="releaseType" icon={BsFilm} formatOptionLabel={optionFormatter(BsFilm)} value={releaseTypeOptions.find((item) => item.value === releaseType)} options={releaseTypeOptions} onChange={(option) => setReleaseType(option?.value || '')} isSearchable={false} className={selectClass('explorePage__select--field')}  /></div>}
+							{mediaType === 'movie' && certificationOptions.length > 0 && <div className="explorePage__field"><span className="explorePage__filterLabel">Age rating · {regionOption.label}</span><AppSelect name="certification" icon={BsStar} formatOptionLabel={optionFormatter(BsStar, (option) => option.label)} value={certificationSelectOptions.find((item) => item.value === certification) || null} options={certificationSelectOptions} onChange={(option) => setCertification(option?.value || '')} isClearable placeholder="Any rating" className={selectClass('explorePage__select--field')}  /></div>}
 						</div>
 					</div>
 				</header>
@@ -167,9 +195,9 @@ const Explore = () => {
 						</div>
 					</div>
 					<div className="explorePage__providerControls">
-						<label className="explorePage__providerSelect"><span className="explorePage__controlLabel">Region</span><Select name="region" value={regionOption} options={regions} onChange={handleRegionChange} className="explorePage__select explorePage__select--region" classNamePrefix="react-select" isSearchable={false} /></label>
-						<div className="explorePage__providerSelect"><span className="explorePage__controlLabel">Streaming service</span><Select name="provider" value={provider} options={providerOptions} getOptionLabel={(option) => option.provider_name} getOptionValue={(option) => option.provider_id} onChange={setProvider} isClearable placeholder={providersLoading ? 'Loading services…' : providerOptions.length ? 'All services' : 'No services listed'} isDisabled={providersLoading || !providerOptions.length} className="explorePage__select explorePage__select--provider" classNamePrefix="react-select" /></div>
-						<div className="explorePage__providerSelect"><span className="explorePage__controlLabel">Availability</span><Select name="monetization" value={monetization} options={monetizationOptions} onChange={setMonetization} isClearable placeholder="Any availability" className="explorePage__select explorePage__select--availability" classNamePrefix="react-select" /></div>
+						<label className="explorePage__providerSelect"><span className="explorePage__controlLabel">Region</span><AppSelect name="region" icon={BsGlobe} formatOptionLabel={optionFormatter(BsGlobe)} value={regionOption} options={regions} onChange={handleRegionChange} className="explorePage__select explorePage__select--region"  isSearchable={false} /></label>
+						<div className="explorePage__providerSelect"><span className="explorePage__controlLabel">Streaming service</span><AppSelect name="provider" icon={BsTv} formatOptionLabel={optionFormatter(BsTv, (option) => option.provider_name, (option) => option.logo_path ? `https://image.tmdb.org/t/p/w92${option.logo_path}` : null)} value={provider} options={providerOptions} getOptionLabel={(option) => option.provider_name} getOptionValue={(option) => option.provider_id} onChange={setProvider} isClearable placeholder={providersLoading ? 'Loading services…' : providerOptions.length ? 'All services' : 'No services listed'} isDisabled={providersLoading || !providerOptions.length} className="explorePage__select explorePage__select--provider"  /></div>
+						<div className="explorePage__providerSelect"><span className="explorePage__controlLabel">Availability</span><AppSelect name="monetization" icon={BsPlayCircle} formatOptionLabel={monetizationOptionFormatter} value={monetization} options={monetizationOptions} onChange={setMonetization} isClearable placeholder="Any availability" className="explorePage__select explorePage__select--availability"  /></div>
 						{(provider || monetization) && <button className="explorePage__clear" type="button" onClick={clearProviderFilters}>Clear service filters</button>}
 					</div>
 					{providerOptions.length > 0 && <div className="explorePage__providerRail" aria-label="Popular streaming services">

@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useMemo, useState } from 'react'
+import { BsBriefcase } from 'react-icons/bs'
 import { useSelector } from 'react-redux'
 
 import './Cast.scss'
 
 import ContentWrapper from '../../../components/contentWrapper/ContentWrapper'
+import AppSelect from '../../../components/appSelect/AppSelect'
 import Img from '../../../components/lazyLoadImage/Img'
 import avatar from '../../../assets/images/avatar.png'
 import { Link } from 'react-router-dom'
@@ -35,7 +37,7 @@ const Cast = ({ data, crew = [], loading }) => {
 						<div className="castSection__tabs" role="tablist" aria-label="Credits">
 							{[{ id: 'cast', label: 'Cast' }, { id: 'crew', label: 'Crew' }].map((tab) => <button className={`castSection__tab ${creditType === tab.id ? 'castSection__tab--active' : ''}`} type="button" role="tab" aria-selected={creditType === tab.id} key={tab.id} onClick={() => { setCreditType(tab.id); setDepartment('All departments') }}>{tab.label}</button>)}
 						</div>
-						{creditType === 'crew' && departments.length > 1 && <label className="castSection__department" aria-label="Filter crew by department"><select value={department} onChange={(event) => setDepartment(event.target.value)}>{departments.map((item) => <option key={item}>{item}</option>)}</select></label>}
+						{creditType === 'crew' && departments.length > 1 && <label className="castSection__department" aria-label="Filter crew by department"><AppSelect aria-label="Filter crew by department" icon={BsBriefcase} options={departments.map((item) => ({ value: item, label: item, icon: BsBriefcase }))} value={{ value: department, label: department }} onChange={(option) => setDepartment(option?.value || 'All departments')} /></label>}
 					</div>
 				</div>
 				{!loading ? (
